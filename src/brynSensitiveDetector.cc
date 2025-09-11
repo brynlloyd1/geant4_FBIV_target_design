@@ -40,8 +40,6 @@ G4bool brynSensitiveDetector::ProcessHits(G4Step* step, G4TouchableHistory* hist
         return false;
     }
 
-
-
     G4VPhysicalVolume* physicalVolume = step->GetPreStepPoint()->GetPhysicalVolume();
 
 
@@ -106,7 +104,6 @@ void brynSensitiveDetector::EndOfEvent(G4HCofThisEvent* hitsCollection) {
         G4ThreeVector direction = hit->getDirection();
 
 
-        // have removed /c for the magMom line - I think this is the cause of my out by 300 error (as geant gives speed in mm/ns)
         std::stringstream ss;
         ss
             << particleName                 << ","

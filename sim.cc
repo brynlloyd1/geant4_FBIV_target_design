@@ -8,18 +8,38 @@
 #include "FTFP_BERT.hh"
 
 // bryn imports
-#include "brynDetectorConstruction.hh"
+#include "brynDetectorConstruction_FBII.hh"
+#include "brynDetectorConstruction_FBIII.hh"
 #include "brynActionInitialisation.hh"
+#include <G4ios.hh>
 
 
 
 int main(int argc, char** argv) {
 
+    // validate CLI input
+    if (argc < 2) {
+        G4cerr << "Usage: " << argv[0] << "<detector_setup> [macro_file]" << G4endl;
+        return 1;
+    }
+
+    // parse CLI input
+    std::string detectorConfiguration = argv[1];
+    std::string macroFile = (argc >= 3) ? argv[2] : "";
+
     ///////////////////////
     // run manager setup //
     ///////////////////////
     auto* runManager = G4RunManagerFactory::CreateRunManager();
-    runManager->SetUserInitialization(new brynDetectorConstruction);
+
+    if (detectorConfiguration == "FBII") {
+        runManager->SetUserInitialization(new brynDetectorConstruction_FBII);
+    } else if (detectorConfiguration == "FBIII") {
+        runManager->SetUserInitialization(new brynDetectorConstruction_FBIII);
+    } else {
+        G4cerr << "Unknown detector setup: " << detectorConfiguration << G4endl;
+    }
+
     runManager->SetUserInitialization(new FTFP_BERT);
     runManager->SetUserInitialization(new brynActionInitialisation);
     runManager->Initialize();
@@ -30,31 +50,13 @@ int main(int argc, char** argv) {
     G4VisManager* visManager = new G4VisExecutive;
     visManager->Initialize();
 
-    //////////////////////
-    // UI manager setup //
-    //////////////////////
-    // gives user choice between batch mode (specify macro files) or interactive mode (dont specify any macro file)
-    // G4UIExecutive* ui;
-    // G4UImanager* UImanager = G4UImanager::GetUIpointer();
-    // if (argc == 1) {
-    //     ui = new G4UIExecutive(argc, argv);
-    //     UImanager->ApplyCommand("/control/execute vis.mac");
-    // } else {
-    //     ui = nullptr;
-    //     UImanager->ApplyCommand(std::string("/control/execute ") + argv[1]);
-    // }
-    // ui->SessionStart();
-
-
-    
     G4UIExecutive* ui = nullptr;
-    if ( argc == 1 ) {
+    if (argc < 3) {
         ui = new G4UIExecutive(argc, argv);
     }
 
 
     // Get the pointer to the User Interface manager
-    //
     G4UImanager* UImanager = G4UImanager::GetUIpointer();  
 
     if (ui) {
@@ -63,7 +65,7 @@ int main(int argc, char** argv) {
         delete ui;
     } else { 
         G4String command = "/control/execute ";
-        G4String fileName = argv[1];
+        G4String fileName = macroFile;
         UImanager->ApplyCommand(command+fileName);
     }
 
@@ -74,7 +76,6 @@ int main(int argc, char** argv) {
     /////////////
     // cleanup //
     /////////////
-    // delete ui;
     delete runManager;
     delete visManager;
 }
