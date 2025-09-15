@@ -11,6 +11,7 @@
 #include "brynDetectorConstruction_FBII.hh"
 #include "brynDetectorConstruction_FBIII.hh"
 #include "brynDetectorConstruction_TESTING.hh"
+#include "brynDetectorConstruction_COREHOLE.hh"
 #include "brynActionInitialisation.hh"
 #include <G4ios.hh>
 
@@ -39,6 +40,8 @@ int main(int argc, char** argv) {
         runManager->SetUserInitialization(new brynDetectorConstruction_FBIII);
     } else if (detectorConfiguration == "TESTING") {
         runManager->SetUserInitialization(new brynDetectorConstruction_TESTING);
+    } else if (detectorConfiguration == "COREHOLE") {
+        runManager->SetUserInitialization(new brynDetectorConstruction_COREHOLE);
     } else {
         G4cerr << "Unknown detector setup: " << detectorConfiguration << G4endl;
     }
