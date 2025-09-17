@@ -45,7 +45,7 @@ G4VPhysicalVolume* brynDetectorConstruction_TESTING::Construct() {
     std::vector<G4LogicalVolume*> tantalumLogicalVolumes;
 
     std::vector<TargetSegment> targetSegments;
-    G4int nSegments = 5;
+    G4int nSegments = 2;
     for (G4int n=0; n<nSegments; n++) {
         targetSegments.push_back({"graphite_"+std::to_string(n), 0.36*m, graphiteMaterial});
         targetSegments.push_back({"tantalum_"+std::to_string(n), 0.01*m, tantalumMaterial});

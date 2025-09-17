@@ -22,6 +22,12 @@ G4VPhysicalVolume* brynDetectorConstruction_FBII::Construct() {
     G4Material* tantalumMaterial = NistManager->FindOrBuildMaterial("G4_Ta");
     G4Material* detectorMaterial = NistManager->FindOrBuildMaterial("G4_Galactic");
 
+    // Charlies thesis uses 1.84 g/cc (guessing thats the default in fluka, but have to manually create that here)
+    G4Element* C = NistManager->FindOrBuildElement("C");
+    G4Material* charlieGraphiteMaterial = new G4Material("charlieGraphite", 1.84 * g/cm3, 1);
+    charlieGraphiteMaterial->AddElement(C, 1);
+
+
     ///////////////////////
     // setup of geometry //
     ///////////////////////
@@ -34,7 +40,7 @@ G4VPhysicalVolume* brynDetectorConstruction_FBII::Construct() {
 
     // graphite
     G4VSolid* solidGraphite = new G4Tubs("solidGraphite", 0.*m, 0.01*m, 0.18*m, 0., 360.0*deg);
-    G4LogicalVolume* logicGraphite = new G4LogicalVolume(solidGraphite, graphiteMaterial, "logicGraphite");
+    G4LogicalVolume* logicGraphite = new G4LogicalVolume(solidGraphite, charlieGraphiteMaterial, "logicGraphite");
     G4VPhysicalVolume* physGraphite = new G4PVPlacement(0, G4ThreeVector(), logicGraphite, "logicGraphite", logicWorld, false, 0, checkOverlaps);
 
     // tantalum
