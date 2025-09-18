@@ -17,24 +17,21 @@ public:
     // methods to collect information
     void setParticleName(G4String particleName);
     void setPosition(G4ThreeVector position);
-    void setSpeed(G4double speed);
-    void setMagMomentum(G4double magMomentum);
     void setKineticEnergy(G4double kineticEnergy);
     void setDirection(G4ThreeVector direction);
+    void setOrigin(G4String origin);
     G4String getParticleName();
     G4ThreeVector getPosition();
-    G4double getSpeed();
-    G4double getMagMomentum();
     G4double getKineticEnergy();
     G4ThreeVector getDirection();
+    G4String getOrigin();
 
 private:
     G4String particleName;
     G4ThreeVector position;
-    G4double speed;
-    G4double magMomentum;
     G4double kineticEnergy;
     G4ThreeVector direction;
+    G4String origin;
 };
 
 

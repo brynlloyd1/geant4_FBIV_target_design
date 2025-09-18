@@ -37,49 +37,57 @@ void brynSensitiveDetector::Initialize(G4HCofThisEvent* hitsCollection) {
 G4bool brynSensitiveDetector::ProcessHits(G4Step* step, G4TouchableHistory* history) {
 
     // only process the first step in the volume
-    if (!step->IsFirstStepInVolume()) {
-        return false;
-}
+    if (!step->IsFirstStepInVolume()) return false;
 
     G4Track* track = step->GetTrack();
+    G4String particleName = track->GetDefinition()->GetParticleName();
 
+
+    G4String parentProcess = "unknown";
+    G4String grandParentProcess = "unknown";
+    G4String origin = "none";
 
     // particle ancestry stuff
-    if (track->GetDefinition()->GetParticleName() == "e-" || track->GetDefinition()->GetParticleName() == "e+") {
+    if (particleName == "e-" || particleName == "e+") {
         auto info = dynamic_cast<brynTrackInformation*>(track->GetUserInformation());
-        G4String parentProcess = "unknown";
-        G4String grandParentProcess = "unknown";
-
         if (info) {
             parentProcess = info->GetParentProcess();
             grandParentProcess = info->GetGrandParentProcess();
-        }
 
-        G4cout << "e+/e- detected!" << G4endl;
-        G4cout << "  parent process: " << parentProcess << G4endl;
-        G4cout << "  grandparent process: " << grandParentProcess << G4endl;
+
+            if (grandParentProcess == "Decay" && parentProcess == "conv") {
+                origin = "pi0";
+            } else if (grandParentProcess == "eBrem" && parentProcess == "conv") {
+                origin = "brem";
+            } else {
+                origin = "other";
+            }
+
+
+        // G4cout << "  parent process:      " << parentProcess << G4endl;
+        // G4cout << "  grandparent process: " << grandParentProcess << G4endl;
+        // G4cout << "  origin category:     " << origin << G4endl;
+
+
+
+        }
     }
 
 
+
     // get data from the track
-    G4String particleName = track->GetDefinition()->GetParticleName();
     G4double kineticEnergy = track->GetKineticEnergy();
     G4ThreeVector momentumDirection = track->GetMomentumDirection();
-    G4ThreeVector momentum = track->GetMomentum();
     G4ThreeVector position = track->GetPosition();
-    G4double speed = track->GetVelocity();
 
-    // process track data into information about the hit
-    G4double magMomentum = momentum.mag();
 
     // add information to the hit
     brynHit* hit = new brynHit();
     hit->setParticleName(particleName);
     hit->setPosition(position);
-    hit->setSpeed(speed);
-    hit->setMagMomentum(magMomentum);
     hit->setKineticEnergy(kineticEnergy);
     hit->setDirection(momentumDirection);
+    hit->setOrigin(origin);
 
     // add hit to the hit collection
     fHitsCollection->insert(hit);
@@ -106,18 +114,18 @@ void brynSensitiveDetector::EndOfEvent(G4HCofThisEvent* hitsCollection) {
     }
 
     if (threadsWithHeader.find(threadID) == threadsWithHeader.end()) {
-        outFile << "particleName,x[m],y[m],z[m],v[m/s],p[MeV/c],kineticEnergy[MeV],dir_x,dir_y,dir_z\n";
+        outFile << "particleName,x[m],y[m],z[m],kineticEnergy[MeV],dir_x,dir_y,dir_z,origin\n";
         threadsWithHeader.insert(threadID);
     }
 
     for (size_t i=0; i<fHitsCollection->entries(); i++) {
         brynHit* hit = (*fHitsCollection)[i];
+
         G4String particleName = hit->getParticleName();
         G4ThreeVector position = hit-> getPosition();
-        G4double speed = hit->getSpeed();
-        G4double magMomentum = hit->getMagMomentum();
         G4double kineticEnergy = hit->getKineticEnergy();
         G4ThreeVector direction = hit->getDirection();
+        G4String origin = hit->getOrigin();
 
 
         std::stringstream ss;
@@ -126,12 +134,11 @@ void brynSensitiveDetector::EndOfEvent(G4HCofThisEvent* hitsCollection) {
             << position.x() / m             << ","
             << position.y() / m             << ","
             << position.z() / m             << ","
-            << speed / (m/s)                << ","
-            << magMomentum                  << ","
             << kineticEnergy / MeV          << ","
             << direction.x()                << ","
             << direction.y()                << ","
-            << direction.z();
+            << direction.z()                << ","
+            << origin;
         std::string line = ss.str();
 
         outFile << line << "\n";
