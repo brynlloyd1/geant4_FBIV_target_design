@@ -26,4 +26,4 @@ for file in beam_data_thread*.csv; do
 done
 
 cd - >/dev/null
-echo "✅ Merged files into ${FINAL_OUTPUT}"
+echo "Merged files into ${FINAL_OUTPUT}"

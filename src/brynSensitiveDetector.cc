@@ -12,6 +12,7 @@
 #include <G4VPhysicalVolume.hh>
 #include <G4VSensitiveDetector.hh>
 #include "G4SystemOfUnits.hh"
+#include "brynTrackInformation.hh"
 
 #include <fstream>
 #include <sstream>
@@ -40,10 +41,23 @@ G4bool brynSensitiveDetector::ProcessHits(G4Step* step, G4TouchableHistory* hist
         return false;
     }
 
-    G4VPhysicalVolume* physicalVolume = step->GetPreStepPoint()->GetPhysicalVolume();
-
-
     G4Track* track = step->GetTrack();
+
+    // particle ancestry stuff
+    if (track->GetDefinition()->GetParticleName() == "e-" || track->GetDefinition()->GetParticleName() == "e+") {
+        auto info = dynamic_cast<brynTrackInformation*>(track->GetUserInformation());
+        G4String creatorProc = "unknown";
+
+        if (info) {
+            creatorProc = info->GetCreatorProcess();
+        }
+
+        G4cout << "Electron/Positron detected!" << G4endl;
+        G4cout << "  Created by process: " << creatorProc << G4endl;
+        G4cout << "  Vertex position: " << track->GetVertexPosition() << G4endl;
+    }
+
+
 
     // get data from the track
     G4String particleName = track->GetDefinition()->GetParticleName();
