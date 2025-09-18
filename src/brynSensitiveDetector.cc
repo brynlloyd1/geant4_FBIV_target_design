@@ -39,24 +39,26 @@ G4bool brynSensitiveDetector::ProcessHits(G4Step* step, G4TouchableHistory* hist
     // only process the first step in the volume
     if (!step->IsFirstStepInVolume()) {
         return false;
-    }
+}
 
     G4Track* track = step->GetTrack();
+
 
     // particle ancestry stuff
     if (track->GetDefinition()->GetParticleName() == "e-" || track->GetDefinition()->GetParticleName() == "e+") {
         auto info = dynamic_cast<brynTrackInformation*>(track->GetUserInformation());
-        G4String creatorProc = "unknown";
+        G4String parentProcess = "unknown";
+        G4String grandParentProcess = "unknown";
 
         if (info) {
-            creatorProc = info->GetCreatorProcess();
+            parentProcess = info->GetParentProcess();
+            grandParentProcess = info->GetGrandParentProcess();
         }
 
-        G4cout << "Electron/Positron detected!" << G4endl;
-        G4cout << "  Created by process: " << creatorProc << G4endl;
-        G4cout << "  Vertex position: " << track->GetVertexPosition() << G4endl;
+        G4cout << "e+/e- detected!" << G4endl;
+        G4cout << "  parent process: " << parentProcess << G4endl;
+        G4cout << "  grandparent process: " << grandParentProcess << G4endl;
     }
-
 
 
     // get data from the track

@@ -1,8 +1,8 @@
 #include "brynActionInitialisation.hh"
 #include "brynPrimaryActionGenerator.hh"
-#include "brynTrackingAction.hh"
+#include "brynSteppingAction.hh"
 
 void brynActionInitialisation::Build() const {
     SetUserAction(new brynPrimaryGeneratorAction);
-    SetUserAction(new brynTrackingAction);
+    SetUserAction(new brynSteppingAction);
 }

@@ -5,17 +5,20 @@
 
 class brynTrackInformation : public G4VUserTrackInformation {
 public:
-    brynTrackInformation() : G4VUserTrackInformation(), creatorProcess("unknown") {}
-    brynTrackInformation(const G4String& proc) : creatorProcess(proc) {}
-    brynTrackInformation(const brynTrackInformation* info) : G4VUserTrackInformation(), creatorProcess(info->creatorProcess) {}
 
+    brynTrackInformation();
+    brynTrackInformation(const brynTrackInformation* info);
     virtual ~brynTrackInformation() {}
 
-    void SetCreatorProcess(const G4String& proc) { creatorProcess = proc; }
-    G4String GetCreatorProcess() const { return creatorProcess; }
+    void SetParentProcess(G4String proc) { parentProcess = proc; }
+    G4String GetParentProcess() const { return parentProcess; }
+
+    void SetGrandParentProcess(G4String name) { grandParentProcess = name; }
+    G4String GetGrandParentProcess() const { return grandParentProcess; }
 
 private:
-    G4String creatorProcess;
+    G4String parentProcess;
+    G4String grandParentProcess;
 };
 
 
