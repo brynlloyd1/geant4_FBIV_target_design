@@ -1,22 +1,19 @@
-#include "brynSensitiveDetector.hh"
 #include "brynHit.hh"
+#include "brynSensitiveDetector.hh"
+#include "brynTrackInformation.hh"
 
 #include "G4HCofThisEvent.hh"
 #include "G4Step.hh"
 #include "G4SDManager.hh"
-#include <CLHEP/Units/PhysicalConstants.h>
-#include <CLHEP/Units/SystemOfUnits.h>
-#include <G4StepStatus.hh>
-#include <G4Threading.hh>
-#include <G4ThreeVector.hh>
-#include <G4VPhysicalVolume.hh>
-#include <G4VSensitiveDetector.hh>
 #include "G4SystemOfUnits.hh"
-#include "brynTrackInformation.hh"
+#include "G4Threading.hh"
+#include "G4ThreeVector.hh"
+#include "G4VSensitiveDetector.hh"
 
 #include <fstream>
 #include <sstream>
 #include <unordered_set>
+
 
 brynSensitiveDetector::brynSensitiveDetector(const G4String& name,
                                              const G4String& hitsCollectionName) : G4VSensitiveDetector(name) {
@@ -42,44 +39,27 @@ G4bool brynSensitiveDetector::ProcessHits(G4Step* step, G4TouchableHistory* hist
     G4Track* track = step->GetTrack();
     G4String particleName = track->GetDefinition()->GetParticleName();
 
-
-    G4String parentProcess = "unknown";
-    G4String grandParentProcess = "unknown";
-    G4String origin = "none";
-
     // particle ancestry stuff
+    std::string ancestryString = "unknown";
     if (particleName == "e-" || particleName == "e+") {
         auto info = dynamic_cast<brynTrackInformation*>(track->GetUserInformation());
         if (info) {
-            parentProcess = info->GetParentProcess();
-            grandParentProcess = info->GetGrandParentProcess();
+            const auto& ancestry = info->GetAncestry();
 
+            std::ostringstream ancestryStr;
+            for (size_t i=0; i<ancestry.size(); i++) {
+                ancestryStr << ancestry[i];
+                if (i < ancestry.size() - 1) ancestryStr << "_";
 
-            if (grandParentProcess == "Decay" && parentProcess == "conv") {
-                origin = "pi0";
-            } else if (grandParentProcess == "eBrem" && parentProcess == "conv") {
-                origin = "brem";
-            } else {
-                origin = "other";
+            ancestryString = ancestryStr.str();
             }
-
-
-        // G4cout << "  parent process:      " << parentProcess << G4endl;
-        // G4cout << "  grandparent process: " << grandParentProcess << G4endl;
-        // G4cout << "  origin category:     " << origin << G4endl;
-
-
-
         }
     }
-
-
 
     // get data from the track
     G4double kineticEnergy = track->GetKineticEnergy();
     G4ThreeVector momentumDirection = track->GetMomentumDirection();
     G4ThreeVector position = track->GetPosition();
-
 
     // add information to the hit
     brynHit* hit = new brynHit();
@@ -87,13 +67,12 @@ G4bool brynSensitiveDetector::ProcessHits(G4Step* step, G4TouchableHistory* hist
     hit->setPosition(position);
     hit->setKineticEnergy(kineticEnergy);
     hit->setDirection(momentumDirection);
-    hit->setOrigin(origin);
+    hit->setAncestry(ancestryString);
 
     // add hit to the hit collection
     fHitsCollection->insert(hit);
     return true;
 }
-
 
 
 /// writes data to csv file
@@ -114,7 +93,7 @@ void brynSensitiveDetector::EndOfEvent(G4HCofThisEvent* hitsCollection) {
     }
 
     if (threadsWithHeader.find(threadID) == threadsWithHeader.end()) {
-        outFile << "particleName,x[m],y[m],z[m],kineticEnergy[MeV],dir_x,dir_y,dir_z,origin\n";
+        outFile << "particleName,x[m],y[m],z[m],kineticEnergy[MeV],dir_x,dir_y,dir_z,ancestry\n";
         threadsWithHeader.insert(threadID);
     }
 
@@ -125,8 +104,7 @@ void brynSensitiveDetector::EndOfEvent(G4HCofThisEvent* hitsCollection) {
         G4ThreeVector position = hit-> getPosition();
         G4double kineticEnergy = hit->getKineticEnergy();
         G4ThreeVector direction = hit->getDirection();
-        G4String origin = hit->getOrigin();
-
+        G4String ancestryString = hit->getAncestry();
 
         std::stringstream ss;
         ss
@@ -138,11 +116,9 @@ void brynSensitiveDetector::EndOfEvent(G4HCofThisEvent* hitsCollection) {
             << direction.x()                << ","
             << direction.y()                << ","
             << direction.z()                << ","
-            << origin;
+            << ancestryString;
         std::string line = ss.str();
-
         outFile << line << "\n";
-
     }
     outFile.close();
 }

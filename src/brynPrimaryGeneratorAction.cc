@@ -1,9 +1,10 @@
 #include "brynPrimaryActionGenerator.hh"
 
+#include "CLHEP/Random/RandGauss.h"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4SystemofUnits.hh"
-#include <CLHEP/Random/RandGauss.h>
+
 
 brynPrimaryGeneratorAction::brynPrimaryGeneratorAction() {
 

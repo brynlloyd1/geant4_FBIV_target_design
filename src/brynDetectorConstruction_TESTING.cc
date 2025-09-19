@@ -1,15 +1,13 @@
 #include "brynDetectorConstruction_TESTING.hh"
 
-#include "G4NistManager.hh"
-
 #include "G4Box.hh"
-#include "G4Tubs.hh"
+#include "G4Colour.hh"
 #include "G4LogicalVolume.hh"
+#include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Tubs.hh"
 #include "G4VisAttributes.hh"
-#include "G4Colour.hh"
-#include <G4ios.hh>
 
 
 struct TargetSegment {
@@ -48,7 +46,7 @@ G4VPhysicalVolume* brynDetectorConstruction_TESTING::Construct() {
 
 
 
-    G4int nSegments = 10;
+    G4int nSegments = 3;
     G4double totalLength = 1.4*m;
     G4double tantalumThickness = 0.01*m;
 

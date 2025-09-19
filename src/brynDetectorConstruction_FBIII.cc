@@ -1,15 +1,14 @@
 #include "brynDetectorConstruction_FBIII.hh"
 
-#include "G4NistManager.hh"
-
 #include "G4Box.hh"
-#include "G4Tubs.hh"
+#include "G4Colour.hh"
 #include "G4LogicalVolume.hh"
+#include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
 #include "G4SystemOfUnits.hh"
-
+#include "G4Tubs.hh"
 #include "G4VisAttributes.hh"
-#include "G4Colour.hh"
+
 
 G4VPhysicalVolume* brynDetectorConstruction_FBIII::Construct() {
 

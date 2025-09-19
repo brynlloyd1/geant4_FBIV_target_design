@@ -1,7 +1,6 @@
 #ifndef brynTrackingAction_hh
 #define brynTrackingAction_hh
 
-
 #include "G4UserTrackingAction.hh"
 
 class brynTrackingAction : public G4UserTrackingAction {

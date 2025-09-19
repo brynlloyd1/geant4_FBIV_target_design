@@ -19,19 +19,19 @@ public:
     void setPosition(G4ThreeVector position);
     void setKineticEnergy(G4double kineticEnergy);
     void setDirection(G4ThreeVector direction);
-    void setOrigin(G4String origin);
+    void setAncestry(G4String ancestry);
     G4String getParticleName();
     G4ThreeVector getPosition();
     G4double getKineticEnergy();
     G4ThreeVector getDirection();
-    G4String getOrigin();
+    G4String getAncestry();
 
 private:
     G4String particleName;
     G4ThreeVector position;
     G4double kineticEnergy;
     G4ThreeVector direction;
-    G4String origin;
+    G4String ancestry;
 };
 
 

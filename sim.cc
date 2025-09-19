@@ -1,4 +1,9 @@
-// geant4 imports
+#include "brynDetectorConstruction_FBII.hh"
+#include "brynDetectorConstruction_FBIII.hh"
+#include "brynDetectorConstruction_TESTING.hh"
+#include "brynDetectorConstruction_COREHOLE.hh"
+#include "brynActionInitialisation.hh"
+
 #include "G4RunManagerFactory.hh"
 #include "G4RunManager.hh"
 #include "G4UIManager.hh"
@@ -6,14 +11,8 @@
 #include "G4VisExecutive.hh"
 #include "G4VisManager.hh"
 #include "FTFP_BERT.hh"
-
-// bryn imports
-#include "brynDetectorConstruction_FBII.hh"
-#include "brynDetectorConstruction_FBIII.hh"
-#include "brynDetectorConstruction_TESTING.hh"
-#include "brynDetectorConstruction_COREHOLE.hh"
-#include "brynActionInitialisation.hh"
 #include <G4ios.hh>
+
 
 
 

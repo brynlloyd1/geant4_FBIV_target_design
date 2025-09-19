@@ -3,23 +3,27 @@
 
 #include "G4VUserTrackInformation.hh"
 
+
 class brynTrackInformation : public G4VUserTrackInformation {
 public:
-
     brynTrackInformation();
     brynTrackInformation(const brynTrackInformation* info);
     virtual ~brynTrackInformation() {}
 
-    void SetParentProcess(G4String proc) { parentProcess = proc; }
-    G4String GetParentProcess() const { return parentProcess; }
+    void AddToAncestry(const G4String& processName) {
+        ancestry.push_back(processName);
+    }
 
-    void SetGrandParentProcess(G4String name) { grandParentProcess = name; }
-    G4String GetGrandParentProcess() const { return grandParentProcess; }
+    const std::vector<G4String>& GetAncestry() const {
+        return ancestry;
+    }
+
+    void SetAncestry(const std::vector<G4String>& ancestry) {
+        this->ancestry = ancestry;
+    }
 
 private:
-    G4String parentProcess;
-    G4String grandParentProcess;
+    std::vector<G4String> ancestry;
+
 };
-
-
 #endif

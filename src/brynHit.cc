@@ -1,6 +1,5 @@
 #include "brynHit.hh"
 
-
 // virtual methods
 void brynHit::Draw() {;}
 void brynHit::Print() {;}
@@ -22,8 +21,8 @@ void brynHit::setDirection(G4ThreeVector direction) {
     this->direction = direction;
 }
 
-void brynHit::setOrigin(G4String origin) {
-    this->origin = origin;
+void brynHit::setAncestry(G4String ancestry) {
+    this->ancestry = ancestry;
 }
 
 
@@ -43,6 +42,6 @@ G4ThreeVector brynHit::getDirection() {
     return this->direction;
 }
 
-G4String brynHit::getOrigin() {
-    return this->origin;
+G4String brynHit::getAncestry() {
+    return this->ancestry;
 }
