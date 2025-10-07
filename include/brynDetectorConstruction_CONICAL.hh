@@ -1,9 +1,9 @@
-#ifndef brynDetectorConstruction_COREHOLE_hh
-#define brynDetectorConstruction_COREHOLE_hh
+#ifndef brynDetectorConstruction_CONICAL_hh
+#define brynDetectorConstruction_CONICAL_hh
 
 #include "brynDetectorConstruction.hh"
 
-class brynDetectorConstruction_COREHOLE : public brynDetectorConstruction {
+class brynDetectorConstruction_CONICAL : public brynDetectorConstruction {
     public:
         // dont need to write constructor or destructor since they are written in the base class
 

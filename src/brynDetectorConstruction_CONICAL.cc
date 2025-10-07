@@ -1,6 +1,7 @@
-#include "brynDetectorConstruction_COREHOLE.hh"
+#include "brynDetectorConstruction_CONICAL.hh"
 
 #include "G4Box.hh"
+#include "G4Cons.hh"
 #include "G4Colour.hh"
 #include "G4LogicalVolume.hh"
 #include "G4NistManager.hh"
@@ -11,7 +12,7 @@
 #include "G4Colour.hh"
 
 
-G4VPhysicalVolume* brynDetectorConstruction_COREHOLE::Construct() {
+G4VPhysicalVolume* brynDetectorConstruction_CONICAL::Construct() {
 
     ////////////////////////
     // defining materials //
@@ -22,6 +23,8 @@ G4VPhysicalVolume* brynDetectorConstruction_COREHOLE::Construct() {
     G4Material* graphiteMaterial = NistManager->FindOrBuildMaterial("G4_GRAPHITE");
     G4Material* tantalumMaterial = NistManager->FindOrBuildMaterial("G4_Ta");
     G4Material* detectorMaterial = NistManager->FindOrBuildMaterial("G4_Galactic");
+    // G4Material* outerMaterial = NistManager->FindOrBuildMaterial("G4_Galactic");
+    // G4Material* outerMaterial = NistManager->FindOrBuildMaterial("G4_POLYETHYLENE");
 
     ///////////////////////
     // setup of geometry //
@@ -34,27 +37,18 @@ G4VPhysicalVolume* brynDetectorConstruction_COREHOLE::Construct() {
     G4VPhysicalVolume* physWorld = new G4PVPlacement(0, G4ThreeVector(), logicWorld,"logicWorld", 0, false, 0, checkOverlaps);
 
 
-    // inner graphite
-    G4VSolid* solidGraphite = new G4Tubs("solidGraphite", 0.*m, 0.005*m, 0.18*m, 0., 360.0*deg);
+    G4VSolid* solidGraphite = new G4Cons("solidGraphite", 0, 0.0015*m, 0, 0.05*m, 0.7*m, 0, 360*deg);
     G4LogicalVolume* logicGraphite = new G4LogicalVolume(solidGraphite, graphiteMaterial, "logicGraphite");
     G4VPhysicalVolume* physGraphite = new G4PVPlacement(0, G4ThreeVector(), logicGraphite, "logicGraphite", logicWorld, false, 0, checkOverlaps);
 
-    // inner tantalum
-    G4ThreeVector tantalumPosition = G4ThreeVector(0.*m, 0.*m, 0.185*m);
-    G4VSolid* solidTantalum = new G4Tubs("solidTantalum", 0.*m, 0.005*m, 0.005*m, 0., 360.0*deg);
-    G4LogicalVolume* logicTantalum = new G4LogicalVolume(solidTantalum, tantalumMaterial, "logicTantalum");
-    G4VPhysicalVolume* physTantalum = new G4PVPlacement(0, tantalumPosition, logicTantalum, "logicTantalum", logicWorld, false, 0, checkOverlaps);
 
-
-    // outer graphite
-    G4VSolid* solidGraphiteOuter = new G4Tubs("solidGraphiteOuter", 0.005*m, 0.01*m, 0.185*m, 0., 360.0*deg);
-    G4LogicalVolume* logicGraphiteOuter = new G4LogicalVolume(solidGraphiteOuter, graphiteMaterial, "logicGraphite");
-    G4VPhysicalVolume* physGraphiteOuter = new G4PVPlacement(0, G4ThreeVector(0., 0., 0.005*m), logicGraphiteOuter, "logicGraphite", logicWorld, false, 0, checkOverlaps);
-
+    // G4VSolid* solidOuter = new G4Cons("solidOuter", 0.014*m, 0.014*m, 0.0015*m, 0.014*m, 0.7*m, 0, 360*deg);
+    // G4LogicalVolume* logicOuter = new G4LogicalVolume(solidOuter, outerMaterial, "logicOuter");
+    // G4VPhysicalVolume* physOuter = new G4PVPlacement(0, G4ThreeVector(), logicOuter, "logicOuter", logicWorld, false, 0, checkOverlaps);
 
     //detector
-    G4ThreeVector detectorPosition = G4ThreeVector(0.*m, 0.*m, 0.191*m);
-    G4VSolid* solidDetector = new G4Tubs("solidDetector", 0.*m, 0.01*m, 0.001*m, 0., 360.0*deg);
+    G4ThreeVector detectorPosition = G4ThreeVector(0.*m, 0.*m, 0.701*m);
+    G4VSolid* solidDetector = new G4Tubs("solidDetector", 0.*m, 0.02*m, 0.001*m, 0., 360.0*deg);
     logicDetector = new G4LogicalVolume(solidDetector, detectorMaterial, "logicDetector");
     G4VPhysicalVolume* physDetector = new G4PVPlacement(0, detectorPosition, logicDetector, "logicDetector", logicWorld, false, 0, checkOverlaps);
 
@@ -68,10 +62,10 @@ G4VPhysicalVolume* brynDetectorConstruction_COREHOLE::Construct() {
     graphiteVisAtt->SetForceSolid(true);
     logicGraphite->SetVisAttributes(graphiteVisAtt);
 
-    G4VisAttributes* tantalumVisAtt= new G4VisAttributes(G4Colour::Magenta());
-    tantalumVisAtt->SetVisibility(true);
-    tantalumVisAtt->SetForceSolid(true);
-    logicTantalum->SetVisAttributes(tantalumVisAtt);
+    G4VisAttributes* outerVisAtt= new G4VisAttributes(G4Colour::Magenta());
+    outerVisAtt->SetVisibility(true);
+    outerVisAtt->SetForceSolid(true);
+    // logicOuter->SetVisAttributes(outerVisAtt);
 
     G4VisAttributes* detectorVisAtt= new G4VisAttributes(G4Colour::White());
     detectorVisAtt->SetVisibility(true);

@@ -46,7 +46,7 @@ G4VPhysicalVolume* brynDetectorConstruction_TESTING::Construct() {
 
 
 
-    G4int nSegments = 3;
+    G4int nSegments = 4;
     G4double totalLength = 1.4*m;
     G4double tantalumThickness = 0.01*m;
 
@@ -89,55 +89,6 @@ G4VPhysicalVolume* brynDetectorConstruction_TESTING::Construct() {
         currentZ += segment.fullLength;
     }
  
-    // std::vector<TargetSegment> targetSegments;
-    // G4int nSegments = 2;
-    // for (G4int n=0; n<nSegments; n++) {
-    //     targetSegments.push_back({"graphite_"+std::to_string(n), 0.36*m, graphiteMaterial});
-    //     targetSegments.push_back({"tantalum_"+std::to_string(n), 0.01*m, tantalumMaterial});
-    // }
-    //
-    //
-    // // std::vector<TargetSegment> targetSegments;
-    // // targetSegments.push_back({"graphite_1", 0.36*m, graphiteMaterial});
-    // // targetSegments.push_back({"tantalum_1", 0.01*m, tantalumMaterial});
-    // // targetSegments.push_back({"graphite_2", 0.36*m, graphiteMaterial});
-    // // targetSegments.push_back({"tantalum_2", 0.01*m, tantalumMaterial});
-    //
-    // G4double totalTargetLength = 0.0;
-    // for (const TargetSegment& seg : targetSegments) {
-    //     totalTargetLength += seg.fullLength;
-    // }
-    // G4double targetRadius = 0.014 * m;
-    //
-    // G4double currentZ = 0.0*m;
-    //
-    // for (size_t i = 0; i < targetSegments.size(); i++) {
-    //     const TargetSegment& segment = targetSegments[i];
-    //
-    //     G4VSolid* solid = new G4Tubs(segment.name+"_solid", 0.*mm, targetRadius, segment.fullLength/2.0, 0., 360*deg);
-    //     G4LogicalVolume* logical = new G4LogicalVolume(solid, segment.material, segment.name+"_logic");
-    //     G4double zPosition = currentZ + segment.fullLength/2.0;
-    //     G4VPhysicalVolume* physical = new G4PVPlacement(0,
-    //                                                     G4ThreeVector(0., 0., zPosition),
-    //                                                     logical,
-    //                                                     segment.name+"_logic",
-    //                                                     logicWorld,
-    //                                                     false,
-    //                                                     0,
-    //                                                     checkOverlaps);
-    //
-    //     // append logical volume for collection, to assign visAttributes to
-    //     if (segment.material == graphiteMaterial) {
-    //         graphiteLogicalVolumes.push_back(logical);
-    //     } else {
-    //         tantalumLogicalVolumes.push_back(logical);
-    //     }
-    //
-    //
-    //     currentZ += segment.fullLength;
-    // }
-    //
-
     //detector
     G4ThreeVector detectorPosition = G4ThreeVector(0.*m, 0.*m, totalLength + 0.001*m);
     G4VSolid* solidDetector = new G4Tubs("solidDetector", 0.*m, targetRadius, 0.001*m, 0., 360.0*deg);

@@ -39,23 +39,19 @@ G4VPhysicalVolume* brynDetectorConstruction_FBII::Construct() {
     G4VPhysicalVolume* physWorld = new G4PVPlacement(0, G4ThreeVector(), logicWorld,"logicWorld", 0, false, 0, checkOverlaps);
 
     // graphite
-    G4double graphiteThickness = 360 * mm;
-    G4VSolid* solidGraphite = new G4Tubs("solidGraphite", 0.*m, 0.01*m, 0.5*graphiteThickness, 0., 360.0*deg);
+    G4VSolid* solidGraphite = new G4Tubs("solidGraphite", 0.*m, 0.01*m, 0.18*m, 0., 360.0*deg);
     G4LogicalVolume* logicGraphite = new G4LogicalVolume(solidGraphite, charlieGraphiteMaterial, "logicGraphite");
     G4VPhysicalVolume* physGraphite = new G4PVPlacement(0, G4ThreeVector(), logicGraphite, "logicGraphite", logicWorld, false, 0, checkOverlaps);
 
     // tantalum
-    G4double tantalumThickness = 20*mm;
-    G4double tantalumZStart = 0.5 * graphiteThickness + 0.5 * tantalumThickness;
-    G4ThreeVector tantalumPosition = G4ThreeVector(0.*m, 0.*m, tantalumZStart);
-    G4VSolid* solidTantalum = new G4Tubs("solidTantalum", 0.*m, 0.01*m, 0.5*tantalumThickness, 0., 360.0*deg);
+    G4ThreeVector tantalumPosition = G4ThreeVector(0.*m, 0.*m, 0.185*m);
+    G4VSolid* solidTantalum = new G4Tubs("solidTantalum", 0.*m, 0.01*m, 0.005*m, 0., 360.0*deg);
     G4LogicalVolume* logicTantalum = new G4LogicalVolume(solidTantalum, tantalumMaterial, "logicTantalum");
     G4VPhysicalVolume* physTantalum = new G4PVPlacement(0, tantalumPosition, logicTantalum, "logicTantalum", logicWorld, false, 0, checkOverlaps);
 
     //detector
-    G4double detectorZStart = 0.5*graphiteThickness + tantalumThickness + 0.0005*m;
-    G4ThreeVector detectorPosition = G4ThreeVector(0.*m, 0.*m, detectorZStart);
-    G4VSolid* solidDetector = new G4Tubs("solidDetector", 0.*m, 0.02*m, 0.001*m, 0., 360.0*deg);
+    G4ThreeVector detectorPosition = G4ThreeVector(0.*m, 0.*m, 0.191*m);
+    G4VSolid* solidDetector = new G4Tubs("solidDetector", 0.*m, 0.05*m, 0.001*m, 0., 360.0*deg);
     logicDetector = new G4LogicalVolume(solidDetector, detectorMaterial, "logicDetector");
     G4VPhysicalVolume* physDetector = new G4PVPlacement(0, detectorPosition, logicDetector, "logicDetector", logicWorld, false, 0, checkOverlaps);
 
