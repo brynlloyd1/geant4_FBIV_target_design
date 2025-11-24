@@ -1,4 +1,5 @@
 #include "brynDetectorConstruction_FBII.hh"
+#include "brynDetectorConstruction_FBIISPLIT.hh"
 #include "brynDetectorConstruction_FBIII.hh"
 #include "brynDetectorConstruction_TESTING.hh"
 #include "brynDetectorConstruction_CONICAL.hh"
@@ -41,6 +42,8 @@ int main(int argc, char** argv) {
         runManager->SetUserInitialization(new brynDetectorConstruction_TESTING);
     } else if (detectorConfiguration == "CONICAL") {
         runManager->SetUserInitialization(new brynDetectorConstruction_CONICAL);
+    } else if (detectorConfiguration == "FBIISPLIT") {
+        runManager->SetUserInitialization(new brynDetectorConstruction_FBIISPLIT);
     } else {
         G4cerr << "Unknown detector setup: " << detectorConfiguration << G4endl;
     }

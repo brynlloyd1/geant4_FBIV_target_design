@@ -32,7 +32,7 @@ brynPrimaryGeneratorAction::~brynPrimaryGeneratorAction() {
 void brynPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
 
     // generate random position
-    G4double sigmaR = 0.001*m;
+    G4double sigmaR = 0.003*m;
     G4double x0 = CLHEP::RandGauss::shoot(0.0, sigmaR);
     G4double y0 = CLHEP::RandGauss::shoot(0.0, sigmaR);
     particleGun->SetParticlePosition(G4ThreeVector(x0, y0, -1.0*m));

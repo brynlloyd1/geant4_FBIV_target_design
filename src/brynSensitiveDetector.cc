@@ -76,7 +76,7 @@ G4bool brynSensitiveDetector::ProcessHits(G4Step* step, G4TouchableHistory* hist
 
 
 /// writes data to csv file
-/// HOWEVER, in multithreading mode, different threads try to write to a csv file at the same time, messing up lines
+/// in multithreading mode, different threads try to write to a csv file at the same time, messing up lines
 /// this writes a temp file for each thread, so this issue doesnt happen
 void brynSensitiveDetector::EndOfEvent(G4HCofThisEvent* hitsCollection) {
 

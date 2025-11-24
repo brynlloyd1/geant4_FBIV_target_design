@@ -34,10 +34,10 @@ G4VPhysicalVolume* brynDetectorConstruction_FBIII::Construct() {
     G4VPhysicalVolume* physWorld = new G4PVPlacement(0, G4ThreeVector(), logicWorld,"logicWorld", 0, false, 0, checkOverlaps);
 
     // target
-    G4VSolid* solidGraphite = new G4Tubs("solidGraphite", 0.*m, 0.014*m, 0.7*m, 0., 360.0*deg);
+    G4VSolid* solidGraphite = new G4Tubs("solidGraphite", 0.*m, 0.01*m, 0.7*m, 0., 360.0*deg);
     G4LogicalVolume* logicGraphite = new G4LogicalVolume(solidGraphite, graphiteMaterial, "logicGraphite");
     G4VPhysicalVolume* physGraphite = new G4PVPlacement(0, G4ThreeVector(), logicGraphite, "logicGraphite", logicWorld, false, 0, checkOverlaps);
-
+    //
     //detector
     G4ThreeVector detectorPosition = G4ThreeVector(0.*m, 0.*m, 0.701*m);
     G4VSolid* solidDetector = new G4Tubs("solidDetector", 0.*m, 0.05*m, 0.001*m, 0., 360.0*deg);

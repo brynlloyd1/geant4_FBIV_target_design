@@ -3,7 +3,7 @@
 
 #include "brynDetectorConstruction.hh"
 
-class brynDetectorConstruction_FBII : public brynDetectorConstruction {
+class brynDetectorConstruction_FBIISPLIT : public brynDetectorConstruction {
     public:
         // dont need to write constructor or destructor since they are written in the base class
 
